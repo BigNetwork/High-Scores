@@ -1,0 +1,194 @@
+<html>
+	<head>
+		<meta http-equiv="Content-type" content="text/html; charset=utf-8">
+		<title>High Scores</title>
+		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript" src="jquery.tablesorter.js"></script> 
+		<link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Tangerine|Josefin+Sans+Std+Light|Lobster|Yanone+Kaffeesatz">
+		<style type="text/css">
+		<!--
+			html, body{
+				height: 100%;
+			}
+			body {
+				background: #eee;
+				font-family: Arial, sans-serif;
+				margin: 0;
+				padding: 0;
+			}
+			#title{
+				color: #333;
+				font-family: Lobster, serif;
+				font-size: 250%;
+				font-weight: bold;
+				letter-spacing: 0.1em;
+				margin: 0.5em auto;
+				padding: 0;
+				text-align: center;
+				text-shadow: 0 0.05em 0 #fff;
+			}
+			#title .description{
+				color: #aaa;
+				display: block;
+				font-family: 'Yanone Kaffeesatz', sans-serif;
+				font-size: 12pt;
+				font-weight: normal;
+				letter-spacing: 0.5em;
+				margin-bottom: 0.3em;
+				text-transform: uppercase;
+			}
+			#users {
+				-webkit-border-radius: 0.4em;
+				background: #eee;
+				border: 0.5em solid #e6e6e6;
+				border-spacing: 0.1em;
+				font-size: 100%;
+				margin: 0 auto;
+				-webkit-transition: 0.5s linear;
+			}
+			#users:hover{
+				background: #e9e9e9;
+				border: 0.5em solid #ddd;
+			}
+			.user {}
+			th, td{
+				background: #fff;
+				padding: 0.4em 0.9em;
+			}
+			.zero_ap{
+				opacity: 0.3;
+			}
+			.username{
+				/*font-weight: bold;*/
+			}
+			.ap{
+				text-align: right;
+				/*white-space: nowrap;*/
+			}
+			th{
+				background: #ccc;
+				border-bottom: 1px solid #aaa;
+				text-align: left;
+				text-shadow: 0 1px 0 #fff;
+			}
+			.header:hover{
+				cursor: pointer;
+			}
+			.headerSortUp, .headerSortDown{
+				background: #bbb;
+				border-color: #999;
+			}
+			.headerSortUp{}
+			.headerSortDown{}
+			.arrow{
+				display: none;
+			}
+			.headerSortUp .asc{
+				display: inline-block;
+			}
+			th.headerSortDown .desc{
+				display: inline-block;
+			}
+			#footer{
+				color: #999;
+				font-family: 'Yanone Kaffeesatz', sans-serif;
+				font-size: 12pt;
+				letter-spacing: 0.0em;
+				padding: 3em 0 2em 0;
+				text-align: center;
+				text-shadow: 0 0.05em 0 #fff;
+				text-transform: uppercase;
+			}
+		-->
+		</style>
+	</head>
+	<body>
+		<script type="text/javascript">
+			$(document).ready(function(){
+				$.getJSON("http://94.247.168.234/bls/index.php?controller=user&action=all&format=json&callback=?", function(data){
+					var users = data || [{id:1,ap:1000,username:"Test (no users retrieved from system)"}];
+					$.each(users, function(i, user){
+						htmlClass = 'user';
+						if (user.ap == 0){
+							htmlClass += ' zero_ap';
+						}
+						
+						row = document.createElement("tr");
+						row.className = htmlClass;
+						row.id = 'user_' + user.id;
+						
+						usernameColumn = document.createElement("td");
+						//usernameColumn.innerHTML = user.username;
+						usernameColumn.innerHTML = '<a href="http://www.wintergate.se/index.php?controller=user&action=show&id=' + user.id + '">' + user.username + '</a>';
+						usernameColumn.className = 'username';
+						
+						apColumn = document.createElement("td");
+						//apColumn.innerHTML = thousandSeparator(user.ap, " ");
+						apColumn.innerHTML = '<integer>' + parseInt(user.ap) + '</integer>';
+						apColumn.className = 'ap';
+						
+						row.appendChild(usernameColumn);
+						row.appendChild(apColumn);
+						$("#users tbody").append(row);
+
+					}); // $.each();
+					$("#users").tablesorter({
+						0: {sorter:"text"}, 
+						1: {sorter:"integer"},
+						sortList: [[0,0]], 
+					}); 
+				}); // $.getJSON();
+			}); // $(document).ready();
+	
+			/*
+			* thousandSeparator (NUMBER n, STRING separator) STRING
+			* or
+			* thousandSeparator (String n, STRING sep) STRING
+			*
+			* Convert a number to the format xxx,xxx,xxx.xxxx
+			* Accepts integers, floating point or string
+			*
+			* Does not accept exponential notation, etc.
+			*
+			* n – the number to be formatted
+			* sep – the separator character. if skipped, “,” is used
+			*/
+			function thousandSeparator(n,sep) {
+				var sRegExp = new RegExp('(-?[0-9]+)([0-9]{3})'), sValue=n+"";
+				if (sep === undefined) {
+				sep=',';
+				}
+				while(sRegExp.test(sValue)) {
+				sValue = sValue.replace(sRegExp, '$1'+sep+'$2');
+				}
+				return sValue;
+			}
+	
+		</script>
+		<h1 id="title">
+			<span class="description">BiG Networks</span>
+			High Scores
+		</h1>
+		<table id="users" class="tablesorter doubleborder">
+			<thead>
+				<tr>
+					<th class="header">
+						Användare
+						<span class="arrow asc">&darr;</span>
+						<span class="arrow desc">&uarr;</span>
+					</th>
+					<th class="header">
+						AP
+						<span class="arrow asc">&darr;</span>
+						<span class="arrow desc">&uarr;</span>
+					</th>
+				</tr>
+			</thead>
+			<tbody>
+			</tbody>
+		</table>
+		<div id="footer">
+			En produkt av <a href="http://www.bignetwork.se/bst">Bignetwork Software Team</a>.
+		</div>
+	</body>
+</html>
