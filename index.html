@@ -93,11 +93,14 @@
 				font-family: 'Yanone Kaffeesatz', sans-serif;
 				font-weight: bold;
 			}
-			.headerSortUp .asc{
+			.header.sorting_asc .up{
 				display: inline-block;
 			}
-			th.headerSortDown .desc{
+			.header.sorting_desc .down{
 				display: inline-block;
+			}
+			#users_filter{
+				display: none;
 			}
 			#footer{
 				color: #999;
@@ -134,7 +137,8 @@
 						
 						apColumn = document.createElement("td");
 						//apColumn.innerHTML = thousandSeparator(user.ap, " ");
-						apColumn.innerHTML = '<integer>' + parseInt(user.ap) + '</integer>';
+						apColumn.innerHTML = parseInt(user.ap);
+						//apColumn.innerHTML = '<integer>' + parseInt(user.ap) + '</integer>';
 						apColumn.className = 'ap';
 						
 						row.appendChild(usernameColumn);
@@ -149,6 +153,10 @@
 					});*/
 					$("#users").dataTable({
 						"aaSorting": [[ 1, "desc" ]],
+						"aoColumns": [ 
+									{ "sType": "html" },
+									{ "sType": "numeric"}
+						],
 						"bPaginate": false,
 						"bLengthChange": false,
 						"bFilter": true,
@@ -192,13 +200,13 @@
 				<tr>
 					<th class="header">
 						Användare
-						<span class="arrow asc">&darr;</span>
-						<span class="arrow desc">&uarr;</span>
+						<span class="arrow down">&darr;</span>
+						<span class="arrow up">&uarr;</span>
 					</th>
 					<th class="header">
 						AP
-						<span class="arrow asc">&darr;</span>
-						<span class="arrow desc">&uarr;</span>
+						<span class="arrow down">&darr;</span>
+						<span class="arrow up">&uarr;</span>
 					</th>
 				</tr>
 			</thead>
