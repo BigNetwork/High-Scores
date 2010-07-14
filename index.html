@@ -3,7 +3,8 @@
 		<meta http-equiv="Content-type" content="text/html; charset=utf-8">
 		<title>High Scores</title>
 		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.js" type="text/javascript" charset="utf-8"></script>
-		<script type="text/javascript" src="jquery.tablesorter.js"></script> 
+		<!--<script type="text/javascript" src="jquery.tablesorter.js"></script>-->
+		<script src="jquery.dataTables.min.js" type="text/javascript" charset="utf-8"></script>
 		<link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Tangerine|Josefin+Sans+Std+Light|Lobster|Yanone+Kaffeesatz">
 		<style type="text/css">
 		<!--
@@ -141,10 +142,18 @@
 						$("#users tbody").append(row);
 
 					}); // $.each();
-					$("#users").tablesorter({
+					/*$("#users").tablesorter({
 						0: {sorter:"text"}, 
 						1: {sorter:"integer"},
 						sortList: [[0,0]], 
+					});*/
+					$("#users").dataTable({
+						"aaSorting": [[ 1, "desc" ]],
+						"bPaginate": false,
+						"bLengthChange": false,
+						"bFilter": true,
+						"bInfo": false,
+						"bAutoWidth": false
 					}); 
 				}); // $.getJSON();
 			}); // $(document).ready();
