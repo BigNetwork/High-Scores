@@ -6,7 +6,7 @@ Techniques/tools used:
 
 * HTML
 
-* CSS3
+* CSS3 (border-radius, background gradients, fonts, transitions etc)
 
 * Javascript
 
@@ -18,3 +18,4 @@ Techniques/tools used:
 
 * JSONP
 
+* Google WebFonts

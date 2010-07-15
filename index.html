@@ -1,9 +1,9 @@
+<!DOCTYPE html>
 <html>
 	<head>
 		<meta http-equiv="Content-type" content="text/html; charset=utf-8">
 		<title>High Scores</title>
 		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.js" type="text/javascript" charset="utf-8"></script>
-		<!--<script type="text/javascript" src="jquery.tablesorter.js"></script>-->
 		<script src="jquery.dataTables.min.js" type="text/javascript" charset="utf-8"></script>
 		<link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Tangerine|Josefin+Sans+Std+Light|Lobster|Yanone+Kaffeesatz">
 		<style type="text/css">
@@ -70,16 +70,19 @@
 				border: 0.5em solid #ddf;
 			}
 			th{
-				background: #ccc;
+				background: #ddd;
 				border-bottom: 1px solid #aaa;
 				text-align: left;
 				text-shadow: 0 1px 0 #fff;
 			}
-			.header{
-				background: #ddd;
-			}
-			.header:hover{
+			th:hover{
 				cursor: pointer;
+			}
+			th, td{
+				padding: 0.4em 0.9em;
+			}
+			td{
+				background: #fff;
 			}
 			.sorting_asc, .sorting_desc{
 				background: #ccc;
@@ -91,10 +94,10 @@
 				font-family: 'Yanone Kaffeesatz', sans-serif;
 				font-weight: bold;
 			}
-			.header.sorting_asc .up{
+			.sorting_asc .up{
 				display: inline-block;
 			}
-			.header.sorting_desc .down{
+			.sorting_desc .down{
 				display: inline-block;
 			}
 			.user{
@@ -107,10 +110,6 @@
 			.user:hover td{
 				background: #ddf;
 				text-shadow: 0 1px 0 #fff;
-			}
-			th, td{
-				background: #fff;
-				padding: 0.4em 0.9em;
 			}
 			.zero_ap{
 				opacity: 0.3;
@@ -181,26 +180,19 @@
 						row.id = 'user_' + user.id;
 						
 						usernameColumn = document.createElement("td");
-						//usernameColumn.innerHTML = user.username;
 						usernameColumn.innerHTML = '<a href="http://www.wintergate.se/index.php?controller=user&action=show&id=' + user.id + '">' + user.username + '</a>';
 						usernameColumn.className = 'username';
 						
 						apColumn = document.createElement("td");
-						//apColumn.innerHTML = thousandSeparator(user.ap, " ");
 						apColumn.innerHTML = parseInt(user.ap);
-						//apColumn.innerHTML = '<integer>' + parseInt(user.ap) + '</integer>';
+						//apColumn.innerHTML = thousandSeparator(user.ap, " ");
 						apColumn.className = 'ap';
 						
 						row.appendChild(usernameColumn);
 						row.appendChild(apColumn);
 						$("#users tbody").append(row);
 
-					}); // $.each();
-					/*$("#users").tablesorter({
-						0: {sorter:"text"}, 
-						1: {sorter:"integer"},
-						sortList: [[0,0]], 
-					});*/
+					}); // end $.each()
 					$("#users").dataTable({
 						"aaSorting": [[ 1, "desc" ], [ 0, "asc" ]],
 						"aoColumns": [ 
@@ -213,8 +205,8 @@
 						"bInfo": false,
 						"bAutoWidth": false
 					});
-				}); // $.getJSON();
-			}); // $(document).ready();
+				}); // end $.getJSON()
+			}); // end $(document).ready()
 	
 			/*
 			* thousandSeparator (NUMBER n, STRING separator) STRING
@@ -245,15 +237,15 @@
 			<span class="description">BiG Networks</span>
 			<a href="index.html">High Scores</a>
 		</h1>
-		<table id="users" class="tablesorter doubleborder">
+		<table id="users">
 			<thead>
 				<tr>
-					<th class="header">
+					<th>
 						Användare
 						<span class="arrow down">&darr;</span>
 						<span class="arrow up">&uarr;</span>
 					</th>
-					<th class="header">
+					<th>
 						AP
 						<span class="arrow down">&darr;</span>
 						<span class="arrow up">&uarr;</span>
