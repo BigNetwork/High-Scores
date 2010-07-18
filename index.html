@@ -128,15 +128,6 @@
 			#users_filter{
 				display: none;
 			}
-			#statistics{
-				color: #999;
-				font-size: 90%;
-				padding: 1em;
-				text-align: center;
-			}
-			#statistics span{
-				display: block;
-			}
 			#footer{
 				background: #222;
 				background-image: -webkit-gradient(
@@ -193,14 +184,12 @@
 						row.id = 'user_' + user.id;
 						
 						var usernameColumn = document.createElement("td");
-						//usernameColumn.innerHTML = user.username;
 						usernameColumn.innerHTML = '<a href="http://www.wintergate.se/index.php?controller=user&action=show&id=' + user.id + '">' + user.username + '</a>';
 						usernameColumn.className = 'username';
 						
 						var apColumn = document.createElement("td");
-						//apColumn.innerHTML = thousandSeparator(user.ap, " ");
+						//apColumn.innerHTML = thousandSeparator(user.ap, " ");	// Not used since it prevents sorting by integer order.
 						apColumn.innerHTML = parseInt(user.ap);
-						//apColumn.innerHTML = '<integer>' + parseInt(user.ap) + '</integer>';
 						apColumn.className = 'ap';
 						
 						row.appendChild(usernameColumn);
@@ -209,7 +198,7 @@
 						
 						apSum += user.ap;
 
-					}); // end $.each();
+					}); // end $.each()
 					
 					var tfoot = document.createElement("tfoot");
 					var row = document.createElement("tr");
@@ -235,8 +224,8 @@
 						"bInfo": false,
 						"bAutoWidth": false
 					});
-				}); // end $.getJSON();
-			}); // end $(document).ready();
+				}); // end $.getJSON()
+			}); // end $(document).ready()
 	
 			/*
 			* thousandSeparator (NUMBER n, STRING separator) STRING
@@ -267,7 +256,7 @@
 			<span class="description">BiG Networks</span>
 			<a href="index.html">High Scores</a>
 		</h1>
-		<table id="users" class="tablesorter doubleborder">
+		<table id="users">
 			<thead>
 				<tr>
 					<th>
