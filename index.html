@@ -1,9 +1,9 @@
-<!DOCTYPE html>
 <html>
 	<head>
 		<meta http-equiv="Content-type" content="text/html; charset=utf-8">
 		<title>High Scores</title>
 		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.js" type="text/javascript" charset="utf-8"></script>
+		<!--<script type="text/javascript" src="jquery.tablesorter.js"></script>-->
 		<script src="jquery.dataTables.min.js" type="text/javascript" charset="utf-8"></script>
 		<link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Tangerine|Josefin+Sans+Std+Light|Lobster|Yanone+Kaffeesatz">
 		<style type="text/css">
@@ -78,12 +78,6 @@
 			th:hover{
 				cursor: pointer;
 			}
-			th, td{
-				padding: 0.4em 0.9em;
-			}
-			td{
-				background: #fff;
-			}
 			.sorting_asc, .sorting_desc{
 				background: #ccc;
 				border-color: #999;
@@ -94,22 +88,23 @@
 				font-family: 'Yanone Kaffeesatz', sans-serif;
 				font-weight: bold;
 			}
-			.sorting_asc .up{
+			th.sorting_asc .up{
 				display: inline-block;
 			}
-			.sorting_desc .down{
+			th.sorting_desc .down{
 				display: inline-block;
-			}
-			.user{
-				
 			}
 			.user td{
+				background: #fff;
 				-webkit-transition: 0.3s ease-in;
 				transition: 0.3s ease-in;
 			}
 			.user:hover td{
 				background: #ddf;
 				text-shadow: 0 1px 0 #fff;
+			}
+			th, td{
+				padding: 0.4em 0.9em;
 			}
 			.zero_ap{
 				opacity: 0.3;
@@ -124,8 +119,23 @@
 				text-align: right;
 				/*white-space: nowrap;*/
 			}
+			#users tfoot th{
+				background: #ccc;
+				color: #666;
+				font-size: 70%;
+				font-weight: normal;
+			}
 			#users_filter{
 				display: none;
+			}
+			#statistics{
+				color: #999;
+				font-size: 90%;
+				padding: 1em;
+				text-align: center;
+			}
+			#statistics span{
+				display: block;
 			}
 			#footer{
 				background: #222;
@@ -167,32 +177,52 @@
 	<body>
 		<script type="text/javascript">
 			$(document).ready(function(){
+				var amountUsersWithoutAP = 0;
+				var apSum = 0;
 				$.getJSON("http://94.247.168.234/bls/index.php?controller=user&action=all&format=json&callback=?", function(data){
-					var users = data || [{id:1,ap:1000,username:"Test (no users retrieved from system)"}];
+					users = data || [{id:1,ap:1000,username:"Test (no users retrieved from system)"}];
 					$.each(users, function(i, user){
-						htmlClass = 'user';
+						var htmlClass = 'user';
 						if (user.ap == 0){
 							htmlClass += ' zero_ap';
+							amountUsersWithoutAP++;
 						}
 						
-						row = document.createElement("tr");
+						var row = document.createElement("tr");
 						row.className = htmlClass;
 						row.id = 'user_' + user.id;
 						
-						usernameColumn = document.createElement("td");
+						var usernameColumn = document.createElement("td");
+						//usernameColumn.innerHTML = user.username;
 						usernameColumn.innerHTML = '<a href="http://www.wintergate.se/index.php?controller=user&action=show&id=' + user.id + '">' + user.username + '</a>';
 						usernameColumn.className = 'username';
 						
-						apColumn = document.createElement("td");
-						apColumn.innerHTML = parseInt(user.ap);
+						var apColumn = document.createElement("td");
 						//apColumn.innerHTML = thousandSeparator(user.ap, " ");
+						apColumn.innerHTML = parseInt(user.ap);
+						//apColumn.innerHTML = '<integer>' + parseInt(user.ap) + '</integer>';
 						apColumn.className = 'ap';
 						
 						row.appendChild(usernameColumn);
 						row.appendChild(apColumn);
 						$("#users tbody").append(row);
+						
+						apSum += user.ap;
 
-					}); // end $.each()
+					}); // end $.each();
+					
+					var tfoot = document.createElement("tfoot");
+					var row = document.createElement("tr");
+					var userTotalColumn = document.createElement("th");
+					userTotalColumn.innerHTML = users.length + ' användare (' + amountUsersWithoutAP + ' utan AP)';
+					var apTotalColumn = document.createElement("th");
+					apTotalColumn.innerHTML = thousandSeparator(apSum, ' ') + ' AP';
+					
+					row.appendChild(userTotalColumn);
+					row.appendChild(apTotalColumn);
+					tfoot.appendChild(row);
+					$("#users").append(tfoot);
+					
 					$("#users").dataTable({
 						"aaSorting": [[ 1, "desc" ], [ 0, "asc" ]],
 						"aoColumns": [ 
@@ -205,8 +235,8 @@
 						"bInfo": false,
 						"bAutoWidth": false
 					});
-				}); // end $.getJSON()
-			}); // end $(document).ready()
+				}); // end $.getJSON();
+			}); // end $(document).ready();
 	
 			/*
 			* thousandSeparator (NUMBER n, STRING separator) STRING
@@ -237,7 +267,7 @@
 			<span class="description">BiG Networks</span>
 			<a href="index.html">High Scores</a>
 		</h1>
-		<table id="users">
+		<table id="users" class="tablesorter doubleborder">
 			<thead>
 				<tr>
 					<th>
