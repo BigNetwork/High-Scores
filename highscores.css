@@ -122,6 +122,10 @@ th, td{
 	padding-top: 0;
 	text-align: center;
 }
+#users_filter input{
+    font-size: 90%;
+    margin-left: 0.5em;
+}
 #footer{
 	background: #222;
 	background-image: -webkit-gradient(
