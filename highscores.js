@@ -2,7 +2,7 @@ $(document).ready(function(){
 	var amountUsersWithoutAP = 0;
 	var apSum = 0;
 	var KEYCODE_ESC = 27;
-	$.getJSON("http://94.247.168.234/bls/index.php?controller=user&action=all&format=json&callback=?", function(data){
+	$.getJSON("http://www.wintergate.se/index.php?event=wg11&controller=user&action=all&format=json&callback=?", function(data){
 		users = data || [{id:1,ap:1000,username:"Test (no users retrieved from system)"}];
 		$.each(users, function(i, user){
 			var htmlClass = 'user';
